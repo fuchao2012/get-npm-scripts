@@ -70,24 +70,26 @@ if (require.main === module) {
   let scriptsSumup = {};
   console.log(`Scripts: `)
   Object.keys(packages).forEach(p=>{
-    Object.keys(packages[p].scripts).forEach(key=>{
-      if(scriptsSumup[key] === undefined){
-        scriptsSumup[key] ={
-          count : 1,
-          details: []
-        }
-        scriptsSumup[key].details.push({
+    if(p && packages[p].scripts){
+      Object.keys(packages[p].scripts).forEach(key=>{
+        if(scriptsSumup[key] === undefined){
+          scriptsSumup[key] ={
+            count : 1,
+            details: []
+          }
+          scriptsSumup[key].details.push({
+              project: p,
+              script: `${key}: ${packages[p].scripts[key]}` 
+          })
+        }else{
+          scriptsSumup[key].count++;
+          scriptsSumup[key].details.push({
             project: p,
             script: `${key}: ${packages[p].scripts[key]}` 
         })
-      }else{
-        scriptsSumup[key].count++;
-        scriptsSumup[key].details.push({
-          project: p,
-          script: `${key}: ${packages[p].scripts[key]}` 
+        }      
       })
-      }      
-    })
+    }
   })
   console.log(JSON.stringify(scriptsSumup, null, 2));
 }
